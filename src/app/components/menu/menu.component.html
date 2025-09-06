@@ -1,13 +1,4 @@
 <nav class="menu">
-  <div class="developer-status">
-    <strong>Keycloak Events:</strong> {{ keycloakStatus }}
-  </div>
-
-  <div class="actions">
-    @if (!authenticated) {
-    <button class="action-item" (click)="login()">Login</button>
-    } @else {
-    <button class="action-item" (click)="logout()">Logout</button>
-    }
-  </div>
+  <!-- <auth></auth> -->
+  <chat-board></chat-board>
 </nav>
