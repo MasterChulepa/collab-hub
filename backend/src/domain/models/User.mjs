@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import { sequelize } from "../config/db.mjs";
+import { sequelize } from "../../infrastructure/database/sequelize.mjs";
 import { compare, hash } from "bcrypt";
 
 export class User extends Model {

@@ -3,7 +3,6 @@ import { WebSocketServer } from "ws";
 export class WSServer {
   constructor(serverOptions) {
     this.wss = new WebSocketServer(serverOptions);
-    console.log("server started on 9000");
     this.clients = new Map();
 
     this.setupConnectionHandling();

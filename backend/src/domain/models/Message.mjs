@@ -1,15 +1,9 @@
 import { Model, DataTypes } from "sequelize";
-import { sequelize } from "../config/db.mjs";
+import { sequelize } from "../../infrastructure/database/sequelize.mjs";
 
-export class RoomMember extends Model {
-  toString() {
-    return `${this.user?.username || "Unknown"} in ${
-      this.room?.name || "Unknown"
-    }`;
-  }
-}
+export class Message extends Model {}
 
-RoomMember.init(
+Message.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -26,13 +20,20 @@ RoomMember.init(
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: "users",
         key: "id",
       },
     },
-    joined_at: {
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    created_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
@@ -40,15 +41,9 @@ RoomMember.init(
   },
   {
     sequelize,
-    modelName: "RoomMember",
-    tableName: "room_members",
+    modelName: "Message",
+    tableName: "messages",
     timestamps: false,
     underscored: true,
-    indexes: [
-      {
-        unique: true,
-        fields: ["room_id", "user_id"],
-      },
-    ],
   }
 );

@@ -1,7 +1,7 @@
 import "dotenv/config";
-import { sequelize } from "./src/config/db.mjs";
+import { sequelize } from "./src/infrastructure/database/sequelize.mjs";
 import express from "express";
-import { router as roomRoutes } from "./src/routes/rooms.js";
+import { router as roomRoutes } from "./src/adapters/http/routes/rooms.js";
 
 const app = express();
 app.use("/api/rooms", roomRoutes);

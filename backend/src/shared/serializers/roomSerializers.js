@@ -1,6 +1,6 @@
 import { serializeMessage } from "./messageSerializer.js";
 
-async function serializeRoom(room, options = {}) {
+export async function serializeRoom(room, options = {}) {
   const result = {
     id: room.id,
     name: room.name,
@@ -15,11 +15,9 @@ async function serializeRoom(room, options = {}) {
     }
   }
 
-  // Добавляем последнее сообщение (если нужно)
   if (options.includeLastMessage && room.last_message) {
     result.last_message = serializeMessage(room.last_message);
   } else if (options.includeLastMessage && !room.last_message) {
-    // Можно загрузить последнее сообщение если не загружено
     const lastMessage = await room.getLast_message();
     if (lastMessage) {
       result.last_message = serializeMessage(lastMessage);
@@ -29,7 +27,6 @@ async function serializeRoom(room, options = {}) {
   return result;
 }
 
-// Массовая сериализация комнат
 export async function serializeRooms(rooms, options = {}) {
   const serializedRooms = [];
 
