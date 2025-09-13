@@ -1,15 +1,4 @@
 services:
-  # keycloak:
-  #   image: quay.io/keycloak/keycloak:26.2.0
-  #   environment:
-  #     KEYCLOAK_ADMIN: admin
-  #     KEYCLOAK_ADMIN_PASSWORD: admin
-  #   ports:
-  #     - 8080:8080
-  #   volumes:
-  #     - ./config/:/opt/keycloak/data/import:ro
-  #   entrypoint: "/opt/keycloak/bin/kc.sh start-dev --import-realm"
-
   db:
     image: postgres:15
     volumes:
@@ -26,22 +15,49 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.50"
+          cpus: 0.50
           memory: 512M
         reservations:
-          cpus: "0.25"
+          cpus: 0.25
           memory: 256M
-    # expose:
-    #   - 5432
     ports:
       - 5432:5432
     expose:
       - 5432
+    networks:
+      - app-network
 
   backend:
-    build: .
-    ports:
-      - 7000:7000
+    build: ./backend
+    expose:
+      - 3000
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    expose:
+      - 80
+    environment:
+      - API_URL=/api
+    networks:
+      - app-network
+
+  reverse-proxy:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:432
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

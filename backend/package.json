@@ -5,8 +5,8 @@
   "description": "Server with websockets",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "start-nodemon": "nodemon server.js"
   },
   "author": "Andrew Gorlo",
   "license": "ISC",
