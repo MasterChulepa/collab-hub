@@ -1,18 +1,10 @@
-import { Component, effect, inject } from '@angular/core';
-import {
-  KEYCLOAK_EVENT_SIGNAL,
-  KeycloakEventType,
-  ReadyArgs,
-  typeEventArgs,
-} from 'keycloak-angular';
-import Keycloak from 'keycloak-js';
+import { Component } from '@angular/core';
 import { ChatBoardComponent } from '../chat-board/chat-board.component';
-import { AuthComponent } from '../auth/auth.component';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css'],
-  imports: [ChatBoardComponent, AuthComponent],
+  imports: [ChatBoardComponent],
 })
 export class MenuComponent {}

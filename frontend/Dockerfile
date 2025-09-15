@@ -1,22 +1,36 @@
-FROM node:20-alpine AS builder
+# Development stage
+FROM node:20-alpine AS development
 
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm install -g @angular/cli@20
-
 RUN npm ci
 
 COPY . .
 
-RUN ng build
+EXPOSE 4200
 
-FROM nginx:alpine
+CMD ["npm", "start"]
 
-COPY nginx.conf /etc/nginx/nginx.conf
+# Production stage
+# FROM node:20-alpine AS builder
 
-COPY --from=builder /app/dist/collab-hub-frontend/browser /usr/share/nginx/html
+# WORKDIR /app
 
-EXPOSE 80
+# COPY package*.json ./
+# RUN npm install -g @angular/cli@20
+# RUN npm ci
 
-CMD ["nginx", "-g", "daemon off;"]
+# COPY . .
+
+# RUN ng build
+
+# FROM nginx:alpine AS production
+
+# COPY nginx.conf /etc/nginx/nginx.conf
+# COPY --from=builder /app/dist/collab-hub-frontend/browser /usr/share/nginx/html
+
+# EXPOSE 80
+
+# CMD ["nginx", "-g", "daemon off;"]
