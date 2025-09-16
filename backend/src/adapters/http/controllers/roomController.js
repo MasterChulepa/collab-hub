@@ -1,5 +1,8 @@
 import { Room } from "../../../domain/models/index.mjs";
-import { serializeRooms, serializeRoom } from "../../../shared/serializers/roomSerializers.js";
+import {
+  serializeRooms,
+  serializeRoom,
+} from "../../../shared/serializers/roomSerializers.js";
 
 export async function getRooms(req, res) {
   try {
@@ -75,5 +78,32 @@ export async function getRoomDetail(req, res) {
     res.json(serializedRoom);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+}
+
+export async function createRoom(req, res) {
+  try {
+    const { name } = req.body || {};
+    if (!name || typeof name !== "string" || name.trim().length === 0) {
+      return res.status(400).json({ error: "'name' is required" });
+    }
+
+    const trimmedName = name.trim();
+
+    const existing = await Room.findOne({ where: { name: trimmedName } });
+    if (existing) {
+      return res
+        .status(409)
+        .json({ error: "Room with this name already exists" });
+    }
+
+    const room = await Room.create({ name: trimmedName });
+    const serialized = await serializeRoom(room, {
+      includeMemberCount: false,
+      includeLastMessage: false,
+    });
+    return res.status(201).json(serialized);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 }

@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RoomsService } from '../../services/rooms.service';
 
 @Component({
   selector: 'chat-board',
@@ -11,11 +11,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class ChatBoardComponent {
   text: any = {};
-  http = inject(HttpClient);
+  roomName = '';
+  roomsService = inject(RoomsService);
 
-  sendMessage() {
-    this.http
-      .get('http://localhost:8000/api/rooms')
+  createRoom() {
+    if (!this.roomName.trim()) return;
+    this.roomsService
+      .createRoom(this.roomName.trim())
       .subscribe((res) => (this.text = res));
   }
 }
